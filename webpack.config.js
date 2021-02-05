@@ -16,7 +16,7 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ],
-      },      {
+      }, {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
@@ -48,7 +48,16 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     noInfo: true,
-    overlay: true
+    overlay: true,
+    proxy: {
+      '/wsApi': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/wsApi': ''
+        },
+      }
+    }
   },
   performance: {
     hints: false
