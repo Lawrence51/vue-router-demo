@@ -50,15 +50,15 @@ module.exports = {
     noInfo: true,
     overlay: true,
     // host:'0.0.0.0',
-    proxy: {
-      '/wsApi': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/wsApi': ''
-        },
-      }
-    }
+    // proxy: {
+    //   '/wsApi': {
+    //     target: 'http://localhost:3001',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/wsApi': ''
+    //     },
+    //   }
+    // }
   },
   performance: {
     hints: false

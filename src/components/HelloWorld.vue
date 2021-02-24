@@ -3,6 +3,7 @@
     <p>测试websocket</p>
     <button @click="sendMessage">点我发送消息</button>
     <button @click="changeNickName">点我修改昵称</button>
+    <button @click="closeChat">点我退出群聊</button>
     <div>
       <p v-for="(item, index) in messageList" :key="index">
         <span>昵称：{{ item.nickname }}</span>
@@ -47,6 +48,9 @@ export default {
     changeNickName(){
       this.nameCount ++;
       this.socket.send('/nick 张三' + this.nameCount)
+    },
+    closeChat(){
+      this.socket.close('1000','退出群聊了哟')
     }
   }
 };
