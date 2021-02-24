@@ -50,7 +50,6 @@ export default class Routes {
 Routes.install = function (Vue) {
   Vue.mixin({
     beforeCreate() {
-      console.log('-------------1', this.$options.router)
       if (this.$options.router) {
         Vue.prototype.$router = this.$options.router;
         Vue.prototype.$router.push = function (options) {

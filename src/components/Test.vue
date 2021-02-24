@@ -1,10 +1,27 @@
 <template>
-  <div @click="handlepush">5555</div>
+  <div>
+    <div @click="handlepush">5555</div>
+    <button @click="closeLink">断开连接</button>
+    <button @click="openLink">打开连接</button>
+  </div>
 </template>
 
 <script>
 export default {
+  data(){
+    return {
+      socket: null
+    }
+  },
   methods: {
+    openLink() {
+      console.log('========')
+      this.websocketLink()
+    },
+    closeLink() {      
+      console.log('========')
+      this.socket.close(1000, '不想连了')
+    },
     handlepush() {
       this.$router.push({ name: "hello" });
     },
@@ -34,14 +51,24 @@ export default {
         });
     },
     websocketLink() {
-      var socket = new WebSocket("ws://localhost:3001/ifc/userinfo");
-      socket.addEventListener("open", function (event) {
-        console.log("socket is open");
-        socket.send("这里是html发送过来的");
+      this.socket = new WebSocket("ws://localhost:3001/ifc/userinfo",'jsonrpc');
+      const _this = this;
+      this.socket.addEventListener("open", function (event) {
+        console.log("socket is open", event);
+        _this.socket.send("这里是html发送过来的");
       });
+      this.socket.onclose = function (event) {
+        console.log("socket is closed", event);
+        // _this.socket.send("这里是html发送过来的");
+      };
 
-      socket.addEventListener("message", function (event) {
-        console.log("Message from server", event.data);
+      this.socket.addEventListener("message", function (event) {
+        console.log("Message from server", event);
+        console.log(" _this.socket",  _this.socket);
+        console.log("websocket只读属性", _this.socket.protocol );
+        console.log("websocket只读属性", _this.socket.extensions );
+        console.log("websocket只读属性", _this.socket.url );
+        console.log("websocket只读属性", _this.socket.readyState );
       });
     },
   },

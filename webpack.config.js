@@ -49,6 +49,7 @@ module.exports = {
     historyApiFallback: true,
     noInfo: true,
     overlay: true,
+    // host:'0.0.0.0',
     proxy: {
       '/wsApi': {
         target: 'http://localhost:3001',

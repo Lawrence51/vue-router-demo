@@ -1,42 +1,55 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <p>测试websocket</p>
+    <button @click="sendMessage">点我发送消息</button>
+    <button @click="changeNickName">点我修改昵称</button>
+    <div>
+      <p v-for="(item, index) in messageList" :key="index">
+        <span>昵称：{{ item.nickname }}</span>
+        <span>内容：{{ item.message }}</span>
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   props: {
-    msg: String
+    msg: String,
+  },
+  data() {
+    return {
+      socket: null,
+      count: 0,
+      messageList : [],
+      nameCount: 0
+    };
+  },
+  mounted() {
+    this.socket = new WebSocket("ws://localhost:8090", "jsonrpc");
+    const _this = this;
+    this.socket.addEventListener("open", function (event) {
+      console.log("socket is open", event);
+      _this.socket.send("这里是html发送过来的");
+    });
+    this.socket.addEventListener("message", function (event) {
+      console.log("socket is message", event);
+      let data = JSON.parse(event.data)
+      _this.messageList.push(data);
+    });
+  },
+  methods:{
+    sendMessage(){
+      this.count ++;
+      this.socket.send('发送了一条消息'+this.count)
+    },
+    changeNickName(){
+      this.nameCount ++;
+      this.socket.send('/nick 张三' + this.nameCount)
+    }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
