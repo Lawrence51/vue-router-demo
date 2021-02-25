@@ -3,6 +3,7 @@
     <div @click="handlepush">5555</div>
     <button @click="closeLink">断开连接</button>
     <button @click="openLink">打开连接</button>
+    <button @click="sendString">点我发送一个 string</button>
     <button @click="sendArrayBuffer">点我发送一个 ArrayBuffer</button>
     <button @click="sendUint32Array">点我发送一个 Uint32Array</button>
     <button @click="sendBlob">点我发送一个 二进制Blob</button>
@@ -53,6 +54,12 @@ export default {
         .catch(function (err) {
           console.log(err);
         });
+    },
+    sendString() {
+    
+      // 发送字符串
+      const buffer = '飞雪连天射白鹿，笑书神侠倚碧鸳';
+      this.socket.send(buffer);
     },
     sendArrayBuffer() {
     
